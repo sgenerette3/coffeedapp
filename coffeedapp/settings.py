@@ -54,7 +54,7 @@ INSTALLED_APPS = (
     'sitegate',
     'bootstrap3',
     'geoposition',
-    'bootstrap_pagination'
+    'bootstrap_pagination',
 )
 
 MIDDLEWARE_CLASSES = (
