@@ -3,18 +3,59 @@
 
     {% block main_content %}
     <div class="row main-content">
-    <div class="row">
         <div class="col-md-2"></div>
+
         <div class="col-md-8">
-            <div>
-            <h3> {{ location.title }} </h3>
-            {% if location.address %} <p> <strong>{{ location.address }}</strong> </p> {% endif %}
-            {% if location.hours %} <p> {{ location.hours }} </p> {% endif %}
-            {% if location.description %} <p> {{ location.description }} </p> {% endif %}
-            {% if location.image_file %} <img class="img-responsive" src="{{ location.image_file.url }}" /> {% endif %}
+
+            <div class="row">
+                <div class="col-md-8">
+                    <h3><a href="{{ location.get_absolute_url }}">{{ location.title }}</h3></a></h3>
+                </div>
+                <div class="col-md-4 text-right">
+                    <h3>{% include 'base/rating.html' with rating=location.get_average_rating %}</h3>
+                </div>
+
+                <div class="data-layer">
+                        <p class="location-data" data-latitude="{{ location.position.latitude }}" data-longitude="{{ location.position.longitude }}" data-id="{{ location.id }}">{{ location.title }}</p>
+                </div>
+                <div class="col-md-4 panel">
+                    <div class="wide-map short-map" id="map"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6 text-center">
+                    <br>
+                         {% if location.address %}<p>{{ location.address }}</p>{% endif %}
+                         {% if location.phone %}<p>{{ location.phone }}</p>{% endif %}
+                         {% if location.website %}<p><a href="{{ location.website }}">{{ location.website }}</a></p>{% endif %}
+                    </div>
+                    <div class="col-md-3"></div>
+                 </div>
+
+                <div class="col-md-12">
+                    {% if location.address %} <p> <strong>Location:</strong> {{ location.address }} </p> {% endif %}
+                    {% if location.hours %} <p>Open: {{ location.hours }} </p> {% endif %}
+                    {% include 'location/specifics.html' with location=location %}
+                    {% if location.description %} <p> {{ location.description }} </p> {% endif %}
+                    {% if location.image_file %} <img class="img-responsive" src="{{ location.image_file.url }}" /> {% endif %}
+                </div>
+                <div class="col-md-12">
+                    <a type="button" href="{% url 'location_update' pk=location.id %}" class="btn btn-default pull-right">Edit</a>
+                    {% if user_review %}
+                    <a type="button" href="{% url 'review_update' pk=location.id %}" class="btn btn-default pull-right">Update Review</a>
+                    {% else %}
+                    <a type="button" href="{% url 'review_create' pk=location.id %}" class="btn btn-default pull-right">Create Review</a>
+                    {% endif %}
+                </div>
+
+            <div class="col-md-12">
+                {% for review in location.get_reviews %}
+                    {% include 'base/reviews.html' with location=location %}
+                {% endfor %}
+            </div>
             </div>
         </div>
+
         <div class="col-md-2"></div>
-    </div>
+
+
     </div>
     {% endblock %}
