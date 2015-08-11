@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'coffeedapp.wsgi.application'
 if ON_HEROKU:
     # Parse database configuration from $DATABASE_URL
     import dj_database_url
-    DATABASES['default'] = dj_database_url.config()
+    DATABASES = {'default': dj_database_url.config(default='postgres://afdglohtzsbmyt:yfS49TXVMqeaOMAuir_tuy5Pku@ec2-54-235-134-128.compute-1.amazonaws.com:5432/d3fjel46fi7r8r')}
 else:
     DATABASES = {
         'default': {
